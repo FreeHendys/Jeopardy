@@ -2,7 +2,6 @@ $(function() {
     const baseApiUrl = "https://jservice.io/api/";
     const numCategories = 6;
     const numClues = 5;
-
 // categories is the main data structure for the app; it looks like this:
 
 //  [
@@ -25,6 +24,7 @@ $(function() {
 
 let categories = [];
 
+
 /** Get NUM_CATEGORIES random category from API.
  *
  * Returns array of category ids
@@ -32,8 +32,8 @@ let categories = [];
 
 async function getCategoryIds() {
     // ask for 100 categories [most we can ask for], so we can pick random
-    let res = await axios.get(`${baseApiUrl}categories?count=100`);
-    let catIds = res.data.map(c => c.id);
+    let response = await axios.get(`${baseApiUrl}categories?count=100`);
+    let catIds = response.data.map(c => c.id);
     return _.sampleSize(catIds, numCategories);
 }
 
@@ -50,17 +50,17 @@ async function getCategoryIds() {
  */
 
 async function getCategory(catId) {
-    let res = await axios.get(`${baseApiUrl}category?id=${catId}`);
-    let cat = res.data;
+    let response = await axios.get(`${baseApiUrl}category?id=${catId}`);
+    let cat = response.data;
     let allClues = cat.clues;
-    let randClues = _.sampleSize(allClues, numClues)
-    let clues = randClues.map(c => ({
+    let randomClues = _.sampleSize(allClues, numClues)
+    let clues = randomClues.map(c => ({
         question: c.question,
         answer: c.answer,
-        showing: null
+        showing: null,
     }));
 
-    return {title: cat.title, clues };
+    return {title: cat.title, clues};
 }
 
 /** Fill the HTML table#jeopardy with the categories & cells for questions.
@@ -113,22 +113,12 @@ function handleClick(evt) {
         alert = clue.answer;
         clue.showing = "answer"
     } else { 
+          // already showing answer; ignore
         return
     }
+
+    // change text of cells
     $(`#${catId}-${clueId}`).html(alert)
-}
-
-/** Wipe the current Jeopardy board, show the loading spinner,
- * and update the button used to fetch data.
- */
-
-function showLoadingView() {
-
-}
-
-/** Remove the loading spinner and update the button used to fetch data. */
-
-function hideLoadingView() {
 }
 
 /** Start game:
@@ -143,14 +133,19 @@ async function setupAndStart() {
     
     categories = [];
 
-    for (let id of catIds) {
-        categories.push(await getCategory(catIds));
+    for (let catId of catIds) {
+        categories.push(await getCategory(catId));
     }
-    fillTable()
+
+    fillTable();
 }
 
+/** On click of restart button, restart game. */
+
 $("#restart").on("click", setupAndStart)
+
 /** On click of start / restart button, set up game. */
+
 $(async function () {
     setupAndStart();
     $("#jeopardy").on("click", "td", handleClick)

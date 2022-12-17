@@ -1,14 +1,12 @@
-/* some colors you may find useful:
-  #115ff4
-  #060ce9
-  #28a200
-  #8d2ab5
-  #74119c
-*/
+
+body {
+  margin: 0;
+}
 #jeopardy {
+  align-self: auto;
   text-align: center;
   font-size: 9pt;
-  background-color: #060ce9;
+  background-color: #4d317a;
   color: white;
   border-collapse: collapse;
 }
@@ -35,4 +33,33 @@ td {
 
 td:hover {
   cursor: pointer;
+  background-color: #5f3c99;
+}
+
+#restart {
+  position: absolute;
+  background-color: white;
+  text-align: center;
+  line-height: 15px;
+  color:#4d317a;
+  border: 4px solid #4d317a; 
+}
+
+h1 {
+  margin-bottom: 5px;
+  margin-top: 0;
+    padding: 60px;
+    text-align: left;
+    background: #4d317a;
+    color: white;
+    font-size: 50px;
+    font-family: 'Secular One', sans-serif;
+}
+
+#x {
+      position: relative;
+      margin: 10px auto;
+      width: 50%;
+      background-color: white;
+      border-radius: 40px;
 }
