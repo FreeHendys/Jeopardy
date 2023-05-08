@@ -113,7 +113,7 @@ function handleClick(evt) {
         alert = clue.answer;
         clue.showing = "answer"
     } else { 
-          // already showing answer; ignore
+          console.log('Already Showing')
         return
     }
 
