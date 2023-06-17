@@ -43,6 +43,14 @@ td:hover {
   line-height: 15px;
   color:#4d317a;
   border: 4px solid #4d317a; 
+  border-radius: 7px;
+}
+
+#restart:hover {
+  background-color: #4d317a;
+  color: white;
+  border: 4px solid #4d317a;
+  border-radius: 7px;
 }
 
 h1 {

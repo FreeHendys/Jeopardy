@@ -76,16 +76,31 @@ async function fillTable() {
   $("#jeopardy thead").empty();
   let $tr = $("<tr>");
   for (let catIdx = 0; catIdx < numCategories; catIdx++) {
-    $tr.append($("<th>").text(categories[catIdx].title));
+    $tr.append($("<th>").text(categories[catIdx]?.title || ""));
   }
   $("#jeopardy thead").append($tr);
 
   // Add rows with questions for each category
   $("#jeopardy tbody").empty();
-  for (let clueIdx = 0; clueIdx < numClues; clueIdx++) {
+
+  if (categories.length === 0) {
+    console.log("Categories not loaded yet");
+    return;
+  }
+
+  let maxClues = Infinity;
+  for (let catIdx = 0; catIdx < numCategories; catIdx++) {
+    if (categories[catIdx].clues.length < maxClues) {
+      maxClues = categories[catIdx].clues.length;
+    }
+  }
+
+ for (let clueIdx = 0; clueIdx < numClues; clueIdx++) {
     let $tr = $("<tr>");
     for (let catIdx = 0; catIdx < numCategories; catIdx++) {
-      $tr.append($("<td>").attr("id", `${catIdx}-${clueIdx}`).text("?"));
+      let clue = categories[catIdx].clues[clueIdx];
+      let text = clue ? "?" : "n/a";
+      $tr.append($("<td>").attr("id", `${catIdx}-${clueIdx}`).text(text));
     }
     $("#jeopardy tbody").append($tr);
   }
@@ -106,15 +121,16 @@ function handleClick(evt) {
 
     let alert;
 
-    if (!clue.showing) {
+    if (clue && !clue.showing) {
         alert = clue.question;
         clue.showing = "question";
-    } else if (clue.showing === "question") {
+    } else if (
+        clue && clue.showing === "question") {
         alert = clue.answer;
-        clue.showing = "answer"
-    } else { 
-          console.log('Already Showing')
-        return
+        clue.showing = "answer";
+    } else {
+        console.log('Already Showing or Clue is undefined');
+        return;
     }
 
     // change text of cells
